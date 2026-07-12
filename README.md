@@ -29,9 +29,9 @@ User Query
 ## Quick Start
 
 ```bash
-pip install -r OneDrive/Desktop/MoJo/requirements.txt
+pip install -r requirements.txt
 export ANTHROPIC_API_KEY=sk-...
-python OneDrive/Desktop/MoJo/app.py
+python app.py
 # → http://localhost:8000
 ```
 
