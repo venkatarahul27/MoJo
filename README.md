@@ -2,7 +2,7 @@
 
 > **MoJo Score = Output Tokens ÷ Human Input Seconds**
 >
-> Maximum intelligence from minimum human effort.
+> An experimental output-volume metric; it does not measure answer quality or accuracy.
 
 A FastAPI web app that orchestrates **three Claude agents in parallel** on every query, then synthesizes their outputs into one sharp brief — all in a single web request.
 
@@ -29,7 +29,9 @@ User Query
 ## Quick Start
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/venkatarahul27/MoJo.git
+cd MoJo
+python -m pip install -r requirements.txt
 export ANTHROPIC_API_KEY=sk-...
 python app.py
 # → http://localhost:8000
@@ -42,26 +44,37 @@ python app.py
 | Layer | Tool |
 |---|---|
 | **Backend** | Python, FastAPI, Anthropic SDK (async) |
-| **Model** | `claude-haiku-4-5` — fastest Claude, ideal for parallel fan-out |
+| **Model** | `claude-haiku-4-5-20251001` (configured in `app.py`) |
 | **Parallel execution** | Python `asyncio` + `AsyncAnthropic` client |
 | **Streaming** | FastAPI `StreamingResponse` + SSE → browser `ReadableStream` |
 | **Frontend** | Vanilla JS + CSS (zero build tools) |
-| **Deployment** | Railway (auto-deploy from GitHub) |
+| **Deployment** | Railway configuration included |
 
 ---
 
-## Why High MoJo Score
+## Design Notes
 
-- **Parallel agents** cut wall-clock latency by ~3x vs sequential calls
-- **Haiku model** gives fast, cheap tokens — maximizing output/cost ratio
-- **SSE streaming** means users see results as agents finish, not after all complete
-- **Single web request** = zero infrastructure overhead
+- The three role-based prompts run concurrently; synthesis runs after their results arrive.
+- Server-Sent Events deliver completed agent results, followed by the synthesis.
+- The research role uses the model's knowledge; this app does not retrieve web sources.
+- Latency and API cost depend on the model and query. No comparative performance benchmark is published here.
+- MoJo Score is output tokens divided by typing time, with a one-second minimum denominator. A higher score does not establish better reasoning.
 
----
+## Deployment
 
-## Live Demo
+The repository includes `Procfile` and `railway.toml` for deployment configuration. Set `ANTHROPIC_API_KEY` in the deployment environment. This README does not currently provide a public demo URL.
 
-Deployed on Railway — multi-agent AI orchestration accessible via web browser.
+## Development Status
+
+This is a portfolio prototype. Automated tests, repeatable evaluations, and production deployment hardening are future work.
+
+## Contributing
+
+Focused improvements to error handling, testing, and evaluation are welcome. Include reproduction steps and relevant validation with changes.
+
+## License
+
+[MIT](LICENSE)
 
 ---
 
